@@ -1,0 +1,32 @@
+{
+  "name": "board-camp",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Management system of a board game rental store using my new knowledge in Relational Database (SQL)",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lgmacedo/boardcamp.git"
+  },
+  "keywords": [],
+  "author": "lgmacedo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lgmacedo/boardcamp/issues"
+  },
+  "homepage": "https://github.com/lgmacedo/boardcamp#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "nodemon": "^2.0.22",
+    "pg": "^8.10.0",
+    "uuid": "^9.0.0"
+  }
+}
