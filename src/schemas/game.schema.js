@@ -14,8 +14,8 @@ const gameSchema = Joi.object({
     "number.min": "O campo 'estoque' deve ser maior que 0.",
   }),
   pricePerDay: Joi.number().min(1).required().messages({
-    "any.required": "O campo 'preçoPorDia' é obrigatório.",
-    "number.min": "O campo 'preçoPorDia' deve ser maior que 0.",
+    "any.required": "O campo 'preço por dia' é obrigatório.",
+    "number.min": "O campo 'preço por dia' deve ser maior que 0.",
   })
 });
 
