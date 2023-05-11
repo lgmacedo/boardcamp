@@ -2,8 +2,9 @@ import { db } from "../database/database.connect.js";
 import dayjs from "dayjs";
 
 export async function getCustomers(req, res) {
+  const {cpf} = req.query;
   try {
-    const customersQuery = await db.query("SELECT * FROM customers;");
+    const customersQuery = cpf? await db.query(`SELECT * FROM customers WHERE cpf LIKE $1 || '%';`, [cpf]) : await db.query("SELECT * FROM customers;");
     const customers = customersQuery.rows.map((c)=>(
       {
         ...c,

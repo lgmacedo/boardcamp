@@ -1,8 +1,9 @@
 import { db } from "../database/database.connect.js";
 
 export async function getGames(req, res) {
+  const {name} = req.query;
   try {
-    const games = await db.query("SELECT * FROM games;");
+    const games = name ? await db.query(`SELECT * FROM games WHERE name ILIKE $1 || '%';`, [name]) : await db.query("SELECT * FROM games;");
     return res.send(games.rows);
   } catch (err) {
     return res.status(500).send(err.message);

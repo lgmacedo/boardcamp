@@ -2,12 +2,15 @@ import { db } from "../database/database.connect.js";
 import dayjs from "dayjs";
 
 export async function getRentals(req, res) {
+  const {customerId, gameId} = req.query;
+  const additional = customerId ? `WHERE "customerId" = ${customerId};` : gameId ? `WHERE "gameId" = ${gameId};` : ";";
+  if(customerId && isNaN(Number(customerId)) || gameId && isNaN(Number(gameId))) return res.status(404).send("Rentals could not be found");
   try {
     const rentalsQuery = await db.query(
       `SELECT rentals.*, customers.name AS customer, games.name AS game 
       FROM rentals 
       JOIN customers ON rentals."customerId" = customers.id 
-      JOIN games ON rentals."gameId" = games.id;`
+      JOIN games ON rentals."gameId" = games.id ${additional}`
     );
     const rentals = rentalsQuery.rows.map((r) => ({
       ...r,
