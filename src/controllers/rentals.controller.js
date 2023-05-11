@@ -12,7 +12,8 @@ export async function getRentals(req, res) {
     const rentals = rentalsQuery.rows.map((r) => ({
       ...r,
       rentDate: dayjs(r.rentDate).format("YYYY-MM-DD"),
-      returnDate: r.returnDate !== null ? dayjs(r.returnDate).format("YYYY-MM-DD") : null,
+      returnDate:
+        r.returnDate !== null ? dayjs(r.returnDate).format("YYYY-MM-DD") : null,
       customer: { id: r.customerId, name: r.customer },
       game: { id: r.gameId, name: r.game },
     }));
@@ -24,7 +25,13 @@ export async function getRentals(req, res) {
 
 export async function postRentals(req, res) {
   const { customerId, gameId, daysRented } = req.body;
-  if (daysRented <= 0) return res.sendStatus(400);
+  if (
+    isNaN(Number(customerId)) ||
+    isNaN(Number(gameId)) ||
+    isNaN(Number(daysRented)) ||
+    daysRented <= 0
+  )
+    return res.sendStatus(400);
   try {
     const customerQuery = await db.query(
       `SELECT * FROM customers WHERE id = $1;`,
@@ -71,8 +78,9 @@ export async function finalizeRentals(req, res) {
     if (rental.returnDate !== null) return res.sendStatus(400);
 
     const returnDate = dayjs().format("YYYY-MM-DD");
-    const daysLate = dayjs(returnDate).diff(dayjs(rental.rentDate), "day") - rental.daysRented;
-    const delayFee = daysLate > 0 ? daysLate*rental.pricePerDay : 0;
+    const daysLate =
+      dayjs(returnDate).diff(dayjs(rental.rentDate), "day") - rental.daysRented;
+    const delayFee = daysLate > 0 ? daysLate * rental.pricePerDay : 0;
 
     await db.query(
       `UPDATE rentals SET "returnDate" = $1, "delayFee" = $2 WHERE id = $3`,
